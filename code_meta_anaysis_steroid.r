@@ -20,7 +20,7 @@ library(data.table)
 
 
 # Load dataset
-load("meta_analysis_steroids_ACP.RData")
+load("meta_analysis_steroids_ACP.RData") 
 
 
 
@@ -76,14 +76,14 @@ analysis_meta <- function(
   exclusion_condition = NULL,
   subgroup_levels = NULL,
   iqwig = FALSE,
-  use_reml = FALSE,  # NEW OPTION: Use REML method for tau estimation
+  use_reml = FALSE,  # REML method for tau estimation
   sm = "RR",
   favors_steroids_right = TRUE,
   extra_columns = NULL,
-  rob_column = NULL  # NEW ARGUMENT: column name for Risk of Bias assessment in data
+  rob_column = NULL  #column name for Risk of Bias assessment in data
 ) {
   
-  # Set general meta-analysis parameters based on methodology choice
+  # Set parameters based on methodology choice
   # IQWIG METHOD: Uses Paule-Mandel with Hartung-Knapp adjustment
   if (iqwig) {
     settings.meta(
@@ -106,7 +106,7 @@ analysis_meta <- function(
       header.line = TRUE
     )
   } else {
-    # STANDARD SETTINGS: DerSimonian-Laird as default, with REML option
+    # STANDARD SETTINGS: DerSimonian-Laird / with REML option
     settings.meta(
       method.random.ci = if (use_hartung_knapp) "HK" else "classic",
       method.tau = if (use_reml) "REML" else "DL",  # USE REML IF SPECIFIED
@@ -251,10 +251,10 @@ analysis_meta <- function(
       lwd = 1,
       lwd.square = 1,
       lwd.diamond = 1,
-      col.square = "black",           # BLACK SQUARES LIKE ORIGINAL
-      col.square.lines = "black",     # BLACK LINES LIKE ORIGINAL
-      col.diamond = "#2E8B7A",        # TEAL GREEN DIAMONDS FOR SUMMARY
-      col.diamond.lines = "#2E8B7A",  # TEAL GREEN LINES FOR SUMMARY
+      col.square = "black",           
+      col.square.lines = "black",     
+      col.diamond = "#2E8B7A",        
+      col.diamond.lines = "#2E8B7A",  
       col.predict = "black",
       col.predict.lines = "black",
       col.lines = "black",
@@ -267,10 +267,10 @@ analysis_meta <- function(
       ff.addline1 = "bold",
       colgap.forest.left = "12mm",
       colgap.forest.right = "8mm",
-      leftlabs = leftlabs_new,        # NEW SIMPLIFIED LABELS
-      leftcols = leftcols_new,        # NEW COMBINED COLUMNS
-      rightcols = rightcols_final,    # RIGHT SIDE COLUMNS
-      rightlabs = rightlabs_final,    # RIGHT SIDE LABELS
+      leftlabs = leftlabs_new,        
+      leftcols = leftcols_new,        
+      rightcols = rightcols_final,    
+      rightlabs = rightlabs_final,    
       addrow.subgroups = TRUE,        
       addrows.below.overall = 2,      
       test.effect.subgroup = FALSE,   
@@ -537,10 +537,10 @@ analysis_meta3 <- function(
       lwd = 1,
       lwd.square = 1,
       lwd.diamond = 1,
-      col.square = "black",           # Black squares as original
-      col.square.lines = "black",     # Black lines as original
-      col.diamond = "#2E8B7A",        # Teal green diamonds for summary
-      col.diamond.lines = "#2E8B7A",  # Teal green lines for summary
+      col.square = "black",           
+      col.square.lines = "black",     
+      col.diamond = "#2E8B7A",        
+      col.diamond.lines = "#2E8B7A",  
       col.predict = "black",
       col.predict.lines = "black",
       col.lines = "black",
@@ -553,10 +553,10 @@ analysis_meta3 <- function(
       ff.addline1 = "bold",
       colgap.forest.left = "12mm",
       colgap.forest.right = "8mm",
-      leftlabs = leftlabs_new,        # Simplified new labels
-      leftcols = leftcols_new,        # New combined columns
-      rightcols = rightcols_final,    # Right columns
-      rightlabs = rightlabs_final,    # Right labels
+      leftlabs = leftlabs_new,        
+      leftcols = leftcols_new,        
+      rightcols = rightcols_final,    
+      rightlabs = rightlabs_final,    
       addrow.subgroups = TRUE,        
       addrows.below.overall = 2,      
       test.effect.subgroup = FALSE,   
@@ -914,7 +914,7 @@ infection_ha <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        # GARDE VOTRE COLONNE STEROID
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
@@ -935,7 +935,7 @@ infection_ha_all <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        # GARDE VOTRE COLONNE STEROID
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),       
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
@@ -1012,7 +1012,7 @@ infection_ss_all <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        # GARDE VOTRE COLONNE STEROID
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
@@ -1069,7 +1069,7 @@ infection_sp <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        # GARDE VOTRE COLONNE STEROID
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
@@ -1090,7 +1090,7 @@ infection_sp_all <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        # GARDE VOTRE COLONNE STEROID
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
@@ -1149,7 +1149,7 @@ infection_cat <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        # GARDE VOTRE COLONNE STEROID
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),      
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 # 10 6
@@ -1169,7 +1169,7 @@ infection_cat_all <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        # GARDE VOTRE COLONNE STEROID
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
@@ -1222,7 +1222,7 @@ infection_bld <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        # GARDE VOTRE COLONNE STEROID
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),       
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
@@ -1242,7 +1242,7 @@ infection_bld_all <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        # GARDE VOTRE COLONNE STEROID
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),       
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
