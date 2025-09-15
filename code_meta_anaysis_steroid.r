@@ -76,14 +76,14 @@ analysis_meta <- function(
   exclusion_condition = NULL,
   subgroup_levels = NULL,
   iqwig = FALSE,
-  use_reml = FALSE,  # REML method for tau estimation
+  use_reml = FALSE,  # REML method fortau
   sm = "RR",
   favors_steroids_right = TRUE,
   extra_columns = NULL,
-  rob_column = NULL  #column name for Risk of Bias assessment in data
+  rob_column = NULL  #Risk of Bias assessment in data
 ) {
   
-  # Set parameters based on methodology choice
+  # Set parameters  methodology choice
   # IQWIG METHOD: Uses Paule-Mandel with Hartung-Knapp adjustment
   if (iqwig) {
     settings.meta(
