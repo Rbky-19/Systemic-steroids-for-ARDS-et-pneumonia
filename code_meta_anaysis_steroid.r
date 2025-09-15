@@ -53,7 +53,7 @@ load("meta_analysis_steroids_ACP.RData")
 ###############################################################################
 
 # Main function for meta-analysis of clinical trials
-# This function handles both binary and continuous outcomes
+# This function handles both binary outcome
 analysis_meta <- function(
   outcomes = "mortality", 
   data,
