@@ -20,7 +20,7 @@ library(data.table)
 
 
 # Load dataset
-load("meta_analysis_steroids_ACP.RData") 
+load("meta_analysis_steroids_ACP.RData")
 
 
 
@@ -53,7 +53,7 @@ load("meta_analysis_steroids_ACP.RData")
 ###############################################################################
 
 # Main function for meta-analysis of clinical trials
-# This function handles both binary outcome
+# Function handles both binary outcomes
 analysis_meta <- function(
   outcomes = "mortality", 
   data,
@@ -76,14 +76,14 @@ analysis_meta <- function(
   exclusion_condition = NULL,
   subgroup_levels = NULL,
   iqwig = FALSE,
-  use_reml = FALSE,  # REML method fortau
+  use_reml = FALSE,  
   sm = "RR",
   favors_steroids_right = TRUE,
   extra_columns = NULL,
-  rob_column = NULL  #Risk of Bias assessment in data
+  rob_column = NULL  #
 ) {
   
-  # Set parameters  methodology choice
+  # Set general meta-analysis parameters 
   # IQWIG METHOD: Uses Paule-Mandel with Hartung-Knapp adjustment
   if (iqwig) {
     settings.meta(
@@ -106,7 +106,7 @@ analysis_meta <- function(
       header.line = TRUE
     )
   } else {
-    # STANDARD SETTINGS: DerSimonian-Laird / with REML option
+    # STANDARD SETTINGS: DerSimonian-Laird as default
     settings.meta(
       method.random.ci = if (use_hartung_knapp) "HK" else "classic",
       method.tau = if (use_reml) "REML" else "DL",  # USE REML IF SPECIFIED
@@ -127,7 +127,7 @@ analysis_meta <- function(
     )
   }
 
-  # Filter data based on outcome of interest
+  # Filter outcome of interest
   filter <- data[data$outcomes == outcomes, ]
   
   # Remove specific subgroup if requested
@@ -173,7 +173,7 @@ analysis_meta <- function(
       n.c = filter[[n.c]],
       studlab = filter[[studlab]],
       data = filter,
-      sm = sm,  # Usually "RR" for risk ratio
+      sm = sm,  
       method = "MH",  # Mantel-Haenszel method
       method.tau = if (iqwig) "PM" else if (use_reml) "REML" else "DL",  # REML FOR BINARY DATA
       common = include_fixed,
@@ -254,7 +254,7 @@ analysis_meta <- function(
       col.square = "black",           
       col.square.lines = "black",     
       col.diamond = "#2E8B7A",        
-      col.diamond.lines = "#2E8B7A",  
+      col.diamond.lines = "#2E8B7A", 
       col.predict = "black",
       col.predict.lines = "black",
       col.lines = "black",
@@ -268,9 +268,9 @@ analysis_meta <- function(
       colgap.forest.left = "12mm",
       colgap.forest.right = "8mm",
       leftlabs = leftlabs_new,        
-      leftcols = leftcols_new,        
+      leftcols = leftcols_new,       
       rightcols = rightcols_final,    
-      rightlabs = rightlabs_final,    
+      rightlabs = rightlabs_final,   
       addrow.subgroups = TRUE,        
       addrows.below.overall = 2,      
       test.effect.subgroup = FALSE,   
@@ -331,13 +331,13 @@ analysis_meta <- function(
   plot_grob <- recordPlot()
   return(list(meta = meta, plot = plot_grob))
 
-  # REDUNDANT CODE BLOCK - This part is unreachable
-  plot_grob <- recordPlot()
+
+
   attr(meta, "plot") <- plot_grob
   return(meta)
 }
 
-# Enhanced version that better handles continuous outcomes
+
 analysis_meta3 <- function(
   outcomes = "mortality", 
   data,
@@ -363,7 +363,7 @@ analysis_meta3 <- function(
   sm = "RR",
   favors_steroids_right = TRUE,
   extra_columns = NULL,
-  rob_column = NULL  # NEW: Risk of Bias column name
+  rob_column = NULL  
 ) {
   
   # Same general parameter setup as analysis_meta
@@ -420,7 +420,7 @@ analysis_meta3 <- function(
     filter[[subgroup]] <- factor(filter[[subgroup]], levels = subgroup_levels)
   }
 
-  # Meta-analysis - MAIN DIFFERENCE: better support for continuous data
+
   if (cont) {
     meta <- metacont(
       n.e = filter[[n.e]],
@@ -492,7 +492,7 @@ analysis_meta3 <- function(
       meta$risk_of_bias <- filter[[rob_column]]
     }
     
-    # CREATE COMBINED COLUMNS - ADAPTED for continuous data
+    # CREATE COMBINED COLUMNS 
     if (cont) {
       # For continuous outcomes - show mean (SD)
       meta$steroids_combined <- paste(formatC(meta$mean.e, format = "f", digits = 1), 
@@ -502,7 +502,7 @@ analysis_meta3 <- function(
                                     formatC(meta$sd.c, format = "f", digits = 1), sep=" (")
       meta$control_combined <- paste0(meta$control_combined, ")")
     } else {
-      # For binary outcomes - same as original
+      # For binary outcomes 
       meta$steroids_combined <- paste(meta$event.e, meta$n.e, sep="/")
       meta$control_combined <- paste(meta$event.c, meta$n.c, sep="/")
     }
@@ -539,7 +539,7 @@ analysis_meta3 <- function(
       lwd.diamond = 1,
       col.square = "black",           
       col.square.lines = "black",     
-      col.diamond = "#2E8B7A",        
+      col.diamond = "#2E8B7A",       
       col.diamond.lines = "#2E8B7A",  
       col.predict = "black",
       col.predict.lines = "black",
@@ -556,7 +556,7 @@ analysis_meta3 <- function(
       leftlabs = leftlabs_new,        
       leftcols = leftcols_new,        
       rightcols = rightcols_final,    
-      rightlabs = rightlabs_final,    
+      rightlabs = rightlabs_final,   
       addrow.subgroups = TRUE,        
       addrows.below.overall = 2,      
       test.effect.subgroup = FALSE,   
@@ -845,14 +845,14 @@ calc_I2_bayes <- function(fit, data, tau_param = "tau") {
     d[zero_cells] <- d[zero_cells] + 0.5
   }
   
-  # Calcul variance et I²
+  # Calcul  de la variance et I2
   vi <- 1/a + 1/b + 1/c + 1/d
   vbar <- mean(vi, na.rm=TRUE)
   
   tau <- rstan::extract(fit, tau_param)[[1]]
   I2 <- 100 * tau^2 / (tau^2 + vbar)
   
-  # Statistiques
+  # Stat
   q <- quantile(I2, c(0.5, 0.025, 0.975), na.rm = TRUE)
   cat(sprintf("I² = %.1f%% [95%% CrI: %.1f%% - %.1f%%]\n", 
               q[1], q[2], q[3]))
@@ -914,7 +914,7 @@ infection_ha <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),      
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
@@ -936,7 +936,7 @@ infection_ha_all <- analysis_meta(
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
   extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),       
-  rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
+  rob_column = "rob2_patterns"      
 )
 
 
@@ -991,7 +991,7 @@ infection_ss <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        # GARDE VOTRE COLONNE STEROID
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
@@ -1069,7 +1069,7 @@ infection_sp <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),       
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
@@ -1091,7 +1091,7 @@ infection_sp_all <- analysis_meta(
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
   extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
-  rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
+  rob_column = "rob2_patterns"       
 )
 
 
@@ -1149,8 +1149,8 @@ infection_cat <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),      
-  rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
+  rob_column = "rob2_patterns"       
 )
 # 10 6
 # Secondary analysis (without restriction on dose, duration or timing) frequentist : Paule-Mandel + Hartung-Knapp
@@ -1169,8 +1169,8 @@ infection_cat_all <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
-  rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),      
+  rob_column = "rob2_patterns"       
 )
 
 # Bayesian analysis (low dose, short duration) 
@@ -1222,7 +1222,7 @@ infection_bld <- analysis_meta(
   studlab = "Authors+O44LA1:R41",
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
-  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),       
+  extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),        
   rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
 )
 
@@ -1243,7 +1243,7 @@ infection_bld_all <- analysis_meta(
   subgroup = "type2",
   subgroup_levels = c("Non severe pneumonia", "Severe pneumonia", "ARDS"),
   extra_columns = c( "Oxygen", "ICU", "Steroid","Daily Dose (mg)", "Duration (days)"),       
-  rob_column = "rob2_patterns"       # AJOUTE LA COLONNE ROB2
+  rob_column = "rob2_patterns"       
 )
 
 # Bayesian analysis (low dose, short duration) 
@@ -1742,10 +1742,10 @@ create_bubble_plot <- function(metareg_obj, xlim = NULL, ylim = NULL, return = F
         metareg_obj,
         xlim = xlim,
         ylim = ylim,
-        pch = 21,              # filled circles
-        col = "#2E8B7A",       # border
-        bg  = "#2E8B7A",       # fill
-        col.line = "#2E8B7A",  # regression line
+        pch = 21,              
+        col = "#2E8B7A",       
+        bg  = "#2E8B7A",       
+        col.line = "#2E8B7A",  
         studlab = TRUE
       )
     )
@@ -3311,7 +3311,6 @@ funnel_fonction_colored_final(
   title        = "Funnel Plot – Long-Term Mortality",
   show_labels  = FALSE
 )
-
 
 
 
